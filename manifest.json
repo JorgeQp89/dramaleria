@@ -1,0 +1,25 @@
+{
+  "name": "MiniSeries Latino",
+  "short_name": "MiniSeries",
+  "description": "Series cortas dobladas al español latino",
+  "start_url": "/dramaleria/",
+  "scope": "/dramaleria/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0f",
+  "theme_color": "#ff2d78",
+  "icons": [
+    {
+      "src": "/dramaleria/bobinas.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/dramaleria/bobinas.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

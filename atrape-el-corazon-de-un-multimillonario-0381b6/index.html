@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/dramaleria/bobinas.png">
+  <link rel="apple-touch-icon" href="/dramaleria/bobinas.png">
+  <!-- PWA -->
+  <link rel="manifest" href="/dramaleria/manifest.json">
+  <meta name="theme-color" content="#ff2d78">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MiniSeries">
   <meta property="og:url"              content="https://jorgeqp89.github.io/dramaleria/atrape-el-corazon-de-un-multimillonario-0381b6/">
   <meta property="og:type"             content="video.other">
   <meta property="og:title"            content="Atrapé el corazón de un multimillonario">
@@ -169,6 +179,11 @@
     }
     modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+    // Registrar Service Worker (PWA)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/dramaleria/sw.js').catch(function(){});
+    }
   </script>
 </body>
 </html>
