@@ -11,8 +11,8 @@
   <meta property="og:image:width"      content="1280">
   <meta property="og:image:height"     content="720">
   <meta property="og:site_name"        content="MiniSeries Latino">
-  <meta property="og:video"            content="https://reelshort.dramafren.org/proxy?url=https://v-mps.crazymaplestudios.com/vod-112094/10a196af071871f1bff75114c1ca0102/93270daa7b36468cba847d707521362c-745dbf701e42ca394263a5375a57f29c-sd.m3u8">
-  <meta property="og:video:secure_url" content="https://reelshort.dramafren.org/proxy?url=https://v-mps.crazymaplestudios.com/vod-112094/10a196af071871f1bff75114c1ca0102/93270daa7b36468cba847d707521362c-745dbf701e42ca394263a5375a57f29c-sd.m3u8">
+  <meta property="og:video"            content="https://v-mps.crazymaplestudios.com/vod-112094/10a196af071871f1bff75114c1ca0102/93270daa7b36468cba847d707521362c-745dbf701e42ca394263a5375a57f29c-sd.m3u8">
+  <meta property="og:video:secure_url" content="https://v-mps.crazymaplestudios.com/vod-112094/10a196af071871f1bff75114c1ca0102/93270daa7b36468cba847d707521362c-745dbf701e42ca394263a5375a57f29c-sd.m3u8">
   <meta property="og:video:type"       content="application/x-mpegURL">
   <meta property="og:video:width"      content="1280">
   <meta property="og:video:height"     content="720">
@@ -111,17 +111,16 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
-    var SRC   = "https://reelshort.dramafren.org/proxy?url=https://v-mps.crazymaplestudios.com/vod-112094/10a196af071871f1bff75114c1ca0102/93270daa7b36468cba847d707521362c-745dbf701e42ca394263a5375a57f29c-sd.m3u8";
+    var SRC   = "https://v-mps.crazymaplestudios.com/vod-112094/10a196af071871f1bff75114c1ca0102/93270daa7b36468cba847d707521362c-745dbf701e42ca394263a5375a57f29c-sd.m3u8";
     var bgVid = document.getElementById('bg-video');
     var badge = document.getElementById('playing-badge');
     var modal = document.getElementById('modal');
 
-    // Autoplay muted de fondo
-    function startBg() {
-      if (!SRC) return;
+    function startBg(src) {
+      if (!src) return;
       if (Hls.isSupported()) {
-        var hls = new Hls();
-        hls.loadSource(SRC);
+        var hls = new Hls({ enableWorker: true });
+        hls.loadSource(src);
         hls.attachMedia(bgVid);
         hls.on(Hls.Events.MANIFEST_PARSED, function() {
           bgVid.play().then(function() {
@@ -129,15 +128,19 @@
             badge.classList.add('show');
           }).catch(function() {});
         });
+        hls.on(Hls.Events.ERROR, function(e, d) {
+          if (d.fatal) console.warn('HLS error:', d.type, d.details);
+        });
       } else if (bgVid.canPlayType('application/vnd.apple.mpegurl')) {
-        bgVid.src = SRC;
+        bgVid.src = src;
         bgVid.play().then(function() {
           bgVid.classList.add('visible');
           badge.classList.add('show');
         }).catch(function() {});
       }
     }
-    startBg();
+
+    startBg(SRC);
 
     function openModal() {
       modal.classList.add('open');
