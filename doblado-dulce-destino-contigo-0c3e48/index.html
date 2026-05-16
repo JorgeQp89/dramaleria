@@ -39,10 +39,13 @@
     .share-row{display:flex;gap:8px;justify-content:center}
     .btn-share{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:50px;font-size:.76rem;font-weight:600;text-decoration:none;color:#fff}
     .s-fb{background:#1877f2}.s-tg{background:#229ed9}.s-wa{background:#25d366}
-    .playing-badge{position:fixed;top:16px;left:16px;z-index:11;display:none;align-items:center;gap:6px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);border-radius:20px;padding:5px 12px;font-size:.72rem;color:#fff}
+    .playing-badge{position:fixed;top:20px;left:16px;z-index:11;display:none;align-items:center;gap:6px;background:rgba(0,0,0,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 12px;font-size:.72rem;color:#fff}
     .playing-badge.show{display:flex}
     .dot{width:7px;height:7px;background:#ff2d78;border-radius:50%;animation:pulse 1.2s ease-in-out infinite}
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+    #btn-mute{position:fixed;top:16px;right:16px;z-index:11;display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.4);transition:background .2s,transform .1s;-webkit-tap-highlight-color:transparent}
+    #btn-mute.show{display:flex}
+    #btn-mute:active{transform:scale(.92);background:rgba(0,0,0,.65)}
     /* ── Modal ── */
     #modal{display:none;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px}
     #modal.open{display:flex}
@@ -70,8 +73,12 @@
   <div class="video-overlay"></div>
   <div class="playing-badge" id="playing-badge">
     <div class="dot"></div>
-    Episodio 1 reproduciendo
+    Ep. 1
   </div>
+  <button id="btn-mute" onclick="toggleMute()" aria-label="Activar sonido">
+    <svg id="icon-muted" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.796 8.796 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.73 18l2 2L21 18.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+    <svg id="icon-sound" width="20" height="20" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+  </button>
   <div class="content">
     <h1 class="title">[doblado] Dulce Destino Contigo</h1>
     <p class="desc">Dolia Jiménez huyó del matrimonio arreglado por su madre, aprovechando su embarazo inesperado con Alejandro Mendoza. 5 años después, él descubrió a Tito y comenzó a cortejarla. Isabella Rivas, celosa,...</p>
@@ -126,6 +133,7 @@
           bgVid.play().then(function() {
             bgVid.classList.add('visible');
             badge.classList.add('show');
+            document.getElementById('btn-mute').classList.add('show');
           }).catch(function() {});
         });
         hls.on(Hls.Events.ERROR, function(e, d) {
@@ -136,11 +144,20 @@
         bgVid.play().then(function() {
           bgVid.classList.add('visible');
           badge.classList.add('show');
+          document.getElementById('btn-mute').classList.add('show');
         }).catch(function() {});
       }
     }
 
     startBg(SRC);
+
+    function toggleMute() {
+      bgVid.muted = !bgVid.muted;
+      var im = document.getElementById('icon-muted');
+      var is = document.getElementById('icon-sound');
+      if (bgVid.muted) { im.style.display=''; is.style.display='none'; }
+      else             { im.style.display='none'; is.style.display=''; }
+    }
 
     function openModal() {
       modal.classList.add('open');
